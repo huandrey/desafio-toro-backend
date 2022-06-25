@@ -34,4 +34,14 @@ export class UserRepository {
 
     return userAlreadyExist;
   }
+
+  async findByEmail(email: string) {
+    const userAlreadyExist = await prisma.users.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return userAlreadyExist;
+  }
 }
