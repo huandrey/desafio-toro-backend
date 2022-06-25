@@ -1,8 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // import { IHttpResponse } from "presentation/protocols/http";
 
-export const badRequest = (error: Error) => ({
-  body: error,
+export const badRequest = (message: string) => ({
+  message,
   statusCode: 400,
 });
 
