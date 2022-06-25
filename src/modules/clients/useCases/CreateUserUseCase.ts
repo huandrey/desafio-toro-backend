@@ -1,4 +1,4 @@
-import { MissingParamError } from "../errors/MissingParamError";
+import { MissingParamError, UserAlreadyExists } from "../errors";
 import { badRequest, sucessCreatedRequest } from "../helpers/http-helper";
 import { UserService } from "../services/UserService";
 
@@ -9,24 +9,30 @@ interface ICreateBody {
   lname: string;
   password: string;
 }
+
 export class CreateUserUseCase {
   constructor(private userService: UserService) {}
 
   // eslint-disable-next-line consistent-return
-  async execute(body: any): Promise<any> {
+  async execute(body: ICreateBody): Promise<any> {
     const requiredFields = ["fname", "lname", "email", "cpf", "password"];
 
     try {
       for (const field of requiredFields) {
         if (!body[field]) {
-          return badRequest(new MissingParamError(field));
+          return badRequest(new MissingParamError(field).message);
         }
       }
 
-      const userAlreadyExist = await this.userService.getUserByCpf(body.cpf);
+      const { cpf, email } = body;
+
+      const userAlreadyExist = await this.userService.verifyUserAlreadyExists(
+        cpf,
+        email
+      );
 
       if (userAlreadyExist) {
-        throw new Error("User already exists!");
+        return badRequest(new UserAlreadyExists(userAlreadyExist).message);
       }
 
       const user = await this.userService.createUser(body);
