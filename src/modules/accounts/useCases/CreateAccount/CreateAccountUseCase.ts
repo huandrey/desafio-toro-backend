@@ -22,7 +22,7 @@ export class CreateAccountUseCase {
       }
 
       const userAccountAlreadyExists =
-        await this.accountService.verifyUserAccountAlreadyExists(userId);
+        await this.accountService.verifyUserAccountAlreadyExistsById(userId);
       // ja possui uma conta?
 
       if (userAccountAlreadyExists) {

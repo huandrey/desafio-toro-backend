@@ -1,7 +1,11 @@
+import { UserRepository } from "../../clients/repositories/UserRepository";
 import { AccountRepository } from "../repositories/AccountRepository";
 
 export class AccountService {
-  constructor(private accountRep: AccountRepository) {}
+  constructor(
+    private accountRep: AccountRepository,
+    private userRep: UserRepository
+  ) {}
 
   async createAccount(userId: string) {
     const agencyNumber = "0001";
@@ -34,9 +38,23 @@ export class AccountService {
     return accountNumber;
   }
 
-  async verifyUserAccountAlreadyExists(userId: string) {
+  async verifyUserAccountAlreadyExistsById(userId: string) {
     const account = await this.accountRep.findAccountByUserId(userId);
 
     return account;
+  }
+
+  async verifyUserAccountAlreadyExistsByCpf(document: string) {
+    const user = await this.userRep.findByCpf(document);
+    if (user) {
+      const account = await this.accountRep.findAccountByUserId(user.id);
+      return account;
+    }
+  }
+
+  async makeDepositInAccount(idAccout: string, amount: number) {
+    const deposit = await this.accountRep.makeDeposit(idAccout, amount);
+
+    return deposit;
   }
 }
