@@ -26,12 +26,13 @@ model Users {
 
 model Accounts {
   id             String         @id @default(uuid())
+  bank           String         @default("352")
   agency_number  String
   account_number String         @unique
   user           Users          @relation(fields: [fk_id_user], references: [id])
   fk_id_user     String         @unique
   balance        Float
-  Source         Transactions[] @relation("Source")
+  // Source         Transactions[] @relation("Source")
   Target         Transactions[] @relation("Target")
   created_at     DateTime       @default(now())
 
@@ -40,8 +41,11 @@ model Accounts {
 
 model Transactions {
   id                String   @id @default(uuid())
-  source_account_id String
-  source_account    Accounts @relation("Source", fields: [source_account_id], references: [id])
+  // source_account_id String
+  // source_account    Accounts @relation("Source", fields: [source_account_id], references: [id])
+  source_bank       String
+  source_branch     String
+  source_cpf        String
   target_account_id String
   target_account    Accounts @relation("Target", fields: [target_account_id], references: [id])
   amount            Float
