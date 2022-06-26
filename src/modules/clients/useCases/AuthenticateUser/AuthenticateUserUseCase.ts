@@ -1,6 +1,6 @@
 import { sign } from "jsonwebtoken";
 
-import { checkPassword } from "../../../../utils/encript";
+import { checkPassword } from "../../../../utils/encrypt";
 import { CredentialError } from "../../errors";
 import { badRequest, getSuccessRequest } from "../../helpers/http-helper";
 import { UserService } from "../../services/UserService";
