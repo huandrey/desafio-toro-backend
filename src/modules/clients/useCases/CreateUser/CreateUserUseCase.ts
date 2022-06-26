@@ -1,4 +1,4 @@
-import { cryptPassword } from "../../../../utils/encript";
+import { cryptPassword } from "../../../../utils/encrypt";
 import { MissingParamError, UserAlreadyExists } from "../../errors";
 import { badRequest, sucessCreatedRequest } from "../../helpers/http-helper";
 import { UserService } from "../../services/UserService";
