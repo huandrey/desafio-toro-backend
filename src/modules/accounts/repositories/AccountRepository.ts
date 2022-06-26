@@ -23,4 +23,19 @@ export class AccountRepository {
 
     return account;
   }
+
+  async makeDeposit(accountId: string, amount: number) {
+    const deposit = await prisma.accounts.update({
+      where: {
+        id: accountId,
+      },
+      data: {
+        balance: {
+          increment: amount,
+        },
+      },
+    });
+
+    return deposit;
+  }
 }
