@@ -9,7 +9,15 @@ export const badRequest = (message: string) => ({
 export const sucessCreatedRequest = (message: string, response: any) => ({
   message,
   data: {
-    response,
+    ...response,
   },
   statusCode: 201,
+});
+
+export const getSuccessRequest = (message: string, response: any) => ({
+  message,
+  data: {
+    ...response,
+  },
+  statusCode: 200,
 });
