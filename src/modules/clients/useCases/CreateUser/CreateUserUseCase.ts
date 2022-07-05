@@ -1,6 +1,9 @@
+import { AppError } from "../../../../shared/errors/AppError";
 import { cryptPassword } from "../../../../utils/encrypt";
+import { User } from "../../entities/User";
 import { MissingParamError, UserAlreadyExists } from "../../errors";
 import { badRequest, sucessCreatedRequest } from "../../helpers/http-helper";
+import { UserRepository } from "../../repositories/UserRepository";
 import { UserService } from "../../services/UserService";
 
 interface ICreateUserProps {
@@ -21,42 +24,41 @@ interface IUser {
 }
 
 export class CreateUserUseCase {
-  constructor(private userService: UserService) {}
+  constructor(private userRep: UserRepository) {}
 
   // eslint-disable-next-line consistent-return
   async execute(body: any): Promise<any> {
     const requiredFields = ["fname", "lname", "email", "cpf", "password"];
 
-    try {
-      for (const field of requiredFields) {
-        if (!body[field]) {
-          return badRequest(new MissingParamError(field).message, 400);
-        }
+    for (const field of requiredFields) {
+      if (!body[field]) {
+        throw new AppError(`Missing param: ${field}`);
       }
-
-      const { cpf, email, password } = body;
-
-      const userAlreadyExist = await this.userService.verifyUserAlreadyExists(
-        cpf,
-        email
-      );
-
-      if (userAlreadyExist) {
-        return badRequest(new UserAlreadyExists(userAlreadyExist).message, 400);
-      }
-
-      const pswdHash = await cryptPassword(password);
-
-      const user = (await this.userService.createUser({
-        ...body,
-        password: pswdHash,
-      })) as IUser;
-
-      delete user.password;
-
-      return sucessCreatedRequest("Success user created.", user);
-    } catch (err) {
-      return badRequest("Some error occurred while creating user", 400);
     }
+
+    const { cpf, email, password } = body;
+
+    const userAlreadyExist = await this.userRep.verifyUserAlreadyExists(
+      cpf,
+      email
+    );
+
+    if (userAlreadyExist) {
+      throw new AppError(`User with ${userAlreadyExist} already exists.`);
+    }
+
+    const pswdHash = await cryptPassword(password);
+
+    const user = (await this.userRep.createUser({
+      ...body,
+      password: pswdHash,
+    })) as IUser;
+
+    // delete user.password;
+
+    return sucessCreatedRequest("Success user created.", {
+      ...user,
+      password: "",
+    });
   }
 }

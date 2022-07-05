@@ -5,13 +5,13 @@ import { UserService } from "../../services/UserService";
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 
 const userRep = new UserRepository();
-const userService = new UserService(userRep);
+// const userService = new UserService(userRep);
 
 export class AuthenticateUserController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 
-    const authenticateUserUseCase = new AuthenticateUserUseCase(userService);
+    const authenticateUserUseCase = new AuthenticateUserUseCase(userRep);
 
     const res = await authenticateUserUseCase.execute({
       email,
