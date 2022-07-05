@@ -28,7 +28,7 @@ export class CreateTransactionUseCase {
         );
 
       if (!userAccountAlreadyExists) {
-        return badRequest(new AccountNotFound().message);
+        return badRequest(new AccountNotFound().message, 400);
       }
 
       const account = await this.transactionService.makeTransfer(
@@ -37,10 +37,9 @@ export class CreateTransactionUseCase {
         amount
       );
 
-      return sucessCreatedRequest("Success account created", account);
+      return sucessCreatedRequest("Successful transaction.", account);
     } catch (err) {
-      console.log(err);
-      return badRequest("Some error occured while creating account");
+      return badRequest("Some error occured while creating account", 500);
     }
   }
 }

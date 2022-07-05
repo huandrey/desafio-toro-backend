@@ -18,7 +18,7 @@ export class CreateAccountUseCase {
       const userAlreadyExist = await this.userService.getUserById(userId);
 
       if (!userAlreadyExist) {
-        return badRequest(new UserNotFound(userId).message);
+        return badRequest(new UserNotFound(userId).message, 400);
       }
 
       const userAccountAlreadyExists =
@@ -26,14 +26,14 @@ export class CreateAccountUseCase {
       // ja possui uma conta?
 
       if (userAccountAlreadyExists) {
-        return badRequest(new AccountAlreadyExists().message);
+        return badRequest(new AccountAlreadyExists().message, 400);
       }
 
       const account = await this.accountService.createAccount(userId);
 
       return sucessCreatedRequest("Success account created", account);
     } catch (err) {
-      return badRequest("Some error occured while creating account");
+      return badRequest("Some error occured while creating account", 500);
     }
   }
 }

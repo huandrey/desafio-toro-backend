@@ -15,6 +15,11 @@ interface ICreateUser {
   [key: string]: ICreateUserProps;
 }
 
+interface IUser {
+  id: string;
+  password?: string;
+}
+
 export class CreateUserUseCase {
   constructor(private userService: UserService) {}
 
@@ -25,7 +30,7 @@ export class CreateUserUseCase {
     try {
       for (const field of requiredFields) {
         if (!body[field]) {
-          return badRequest(new MissingParamError(field).message);
+          return badRequest(new MissingParamError(field).message, 400);
         }
       }
 
@@ -37,19 +42,21 @@ export class CreateUserUseCase {
       );
 
       if (userAlreadyExist) {
-        return badRequest(new UserAlreadyExists(userAlreadyExist).message);
+        return badRequest(new UserAlreadyExists(userAlreadyExist).message, 400);
       }
 
       const pswdHash = await cryptPassword(password);
 
-      const user = await this.userService.createUser({
+      const user = (await this.userService.createUser({
         ...body,
         password: pswdHash,
-      });
+      })) as IUser;
+
+      delete user.password;
 
       return sucessCreatedRequest("Success user created.", user);
     } catch (err) {
-      return badRequest("Some error occurred while creating user");
+      return badRequest("Some error occurred while creating user", 400);
     }
   }
 }

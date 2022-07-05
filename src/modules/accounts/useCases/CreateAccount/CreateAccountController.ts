@@ -7,8 +7,8 @@ import { AccountService } from "../../services/AccountService";
 import { CreateAccountUseCase } from "./CreateAccountUseCase";
 
 const accountRep = new AccountRepository();
-const accountServive = new AccountService(accountRep);
 const userRep = new UserRepository();
+const accountServive = new AccountService(accountRep, userRep);
 const userService = new UserService(userRep);
 
 export class CreateAccountController {
@@ -19,8 +19,6 @@ export class CreateAccountController {
       userService,
       accountServive
     );
-
-    console.log(userId);
 
     const res = await createAccountUseCase.execute(userId);
 
