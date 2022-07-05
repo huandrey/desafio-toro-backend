@@ -1,21 +1,22 @@
+import { UserRepository } from "modules/clients/repositories/UserRepository";
+
 import { UserNotFound } from "../../../clients/errors";
 import {
   badRequest,
   sucessCreatedRequest,
 } from "../../../clients/helpers/http-helper";
-import { UserService } from "../../../clients/services/UserService";
 import AccountAlreadyExists from "../../errors/AccountAlreadyExists";
 import { AccountService } from "../../services/AccountService";
 
 export class CreateAccountUseCase {
   constructor(
-    private userService: UserService,
+    private userRep: UserRepository,
     private accountService: AccountService
   ) {}
 
   async execute(userId: string) {
     try {
-      const userAlreadyExist = await this.userService.getUserById(userId);
+      const userAlreadyExist = await this.userRep.findById(userId);
 
       if (!userAlreadyExist) {
         return badRequest(new UserNotFound(userId).message, 400);

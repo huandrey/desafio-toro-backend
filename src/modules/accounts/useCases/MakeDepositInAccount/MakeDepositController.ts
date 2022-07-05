@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 
 import { UserRepository } from "../../../clients/repositories/UserRepository";
-// import { UserService } from "../../../clients/services/UserService";
 import { AccountRepository } from "../../repositories/AccountRepository";
 import { AccountService } from "../../services/AccountService";
 import { MakeDepositUseCase } from "./MakeDepositUseCase";
 
 const userRep = new UserRepository();
-// const userService = new UserService(userRep);
 const accountRep = new AccountRepository();
 const accountServive = new AccountService(accountRep, userRep);
 
