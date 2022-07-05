@@ -21,7 +21,6 @@ export class TransactionService {
 
   async listTransactions(id: string) {
     const account = await this.accountRep.findAccountByUserId(id);
-    console.log(`f -> ${JSON.stringify(account, null, 2)}`);
     if (account) {
       const transactions = await this.transactionRep.getAllTransactionsOfUser(
         account.id
