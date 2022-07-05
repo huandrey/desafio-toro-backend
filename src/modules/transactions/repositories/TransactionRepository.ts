@@ -1,7 +1,13 @@
-import { prisma } from "../../../database";
+import { Transactions } from "@prisma/client";
 
-export class TransactionRepository {
-  async getAllTransactionsOfUser(idAccount: string) {
+import { prisma } from "../../../database";
+import { SourceBankDTO } from "../DTO/SourceBankDTO";
+import { ITransactionRepository } from "./ITransactionRepository";
+
+export class TransactionRepository implements ITransactionRepository {
+  async getAllTransactionsOfUser(
+    idAccount: string
+  ): Promise<Transactions[] | null> {
     const transactions = await prisma.transactions.findMany({
       where: {
         target_account_id: idAccount,
@@ -11,7 +17,9 @@ export class TransactionRepository {
     return transactions;
   }
 
-  async findTransactionById(transactionId: string) {
+  async findTransactionById(
+    transactionId: string
+  ): Promise<Transactions | null> {
     const transaction = await prisma.transactions.findUnique({
       where: {
         id: transactionId,
@@ -21,7 +29,11 @@ export class TransactionRepository {
     return transaction;
   }
 
-  async makeTransfer(targetAccountId: any, sourceBank: any, amount: number) {
+  async makeTransfer(
+    targetAccountId: string,
+    sourceBank: SourceBankDTO,
+    amount: number
+  ): Promise<Transactions | null> {
     const transaction = await prisma.transactions.create({
       data: {
         target_account_id: targetAccountId,
