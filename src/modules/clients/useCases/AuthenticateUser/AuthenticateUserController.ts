@@ -10,7 +10,6 @@ const userService = new UserService(userRep);
 export class AuthenticateUserController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
-    console.log(email, password);
 
     const authenticateUserUseCase = new AuthenticateUserUseCase(userService);
 
@@ -18,7 +17,7 @@ export class AuthenticateUserController {
       email,
       password,
     });
-    console.log(res);
+
     return response.status(res.statusCode).json(res);
   }
 }

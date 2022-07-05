@@ -18,7 +18,8 @@ export class AuthenticateUserUseCase {
 
       if (!user) {
         return badRequest(
-          new CredentialError("email or password incorrect").message
+          new CredentialError("email or password incorrect").message,
+          400
         );
       }
 
@@ -26,7 +27,8 @@ export class AuthenticateUserUseCase {
 
       if (!pswdMatch) {
         return badRequest(
-          new CredentialError("email or password incorrect").message
+          new CredentialError("email or password incorrect").message,
+          400
         );
       }
 
