@@ -1,6 +1,16 @@
 import { prisma } from "../../../database";
 
 export class TransactionRepository {
+  async getAllTransactionsOfUser(idAccount: string) {
+    const transactions = await prisma.transactions.findMany({
+      where: {
+        target_account_id: idAccount,
+      },
+    });
+
+    return transactions;
+  }
+
   async findTransactionById(transactionId: string) {
     const transaction = await prisma.transactions.findUnique({
       where: {
@@ -23,16 +33,5 @@ export class TransactionRepository {
     });
 
     return transaction;
-    // const deposit = await prisma.transactions.update({
-    //   where: {
-    //     id: ,
-    //   },
-    //   data: {
-    //     balance: {
-    //       increment: amount,
-    //     },
-    //   },
-    // });
-    // return deposit;
   }
 }
