@@ -1,11 +1,10 @@
 import { sign } from "jsonwebtoken";
+import { AuthenticateDTO } from "modules/clients/DTO/AuthenticateDTO";
 import { UserRepository } from "modules/clients/repositories/UserRepository";
 
 import { AppError } from "../../../../shared/errors/AppError";
 import { checkPassword } from "../../../../utils/encrypt";
-import { CredentialError } from "../../errors";
-import { badRequest, getSuccessRequest } from "../../helpers/http-helper";
-import { UserService } from "../../services/UserService";
+import { getSuccessRequest } from "../../helpers/http-helper";
 
 interface IUser {
   id: string;
@@ -15,7 +14,7 @@ interface IUser {
 
 export class AuthenticateUserUseCase {
   constructor(private userRep: UserRepository) {}
-  async execute({ email, password }: any): Promise<any> {
+  async execute({ email, password }: AuthenticateDTO): Promise<any> {
     const user = (await this.userRep.findByEmail(email)) as IUser;
 
     if (!user) {

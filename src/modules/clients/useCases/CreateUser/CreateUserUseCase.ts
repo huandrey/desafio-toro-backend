@@ -1,22 +1,7 @@
 import { AppError } from "../../../../shared/errors/AppError";
 import { cryptPassword } from "../../../../utils/encrypt";
-import { User } from "../../entities/User";
-import { MissingParamError, UserAlreadyExists } from "../../errors";
-import { badRequest, sucessCreatedRequest } from "../../helpers/http-helper";
+import { sucessCreatedRequest } from "../../helpers/http-helper";
 import { UserRepository } from "../../repositories/UserRepository";
-import { UserService } from "../../services/UserService";
-
-interface ICreateUserProps {
-  cpf: string;
-  email: string;
-  fname: string;
-  lname: string;
-  password: string;
-}
-
-interface ICreateUser {
-  [key: string]: ICreateUserProps;
-}
 
 interface IUser {
   id: string;
@@ -26,17 +11,16 @@ interface IUser {
 export class CreateUserUseCase {
   constructor(private userRep: UserRepository) {}
 
-  // eslint-disable-next-line consistent-return
-  async execute(body: any): Promise<any> {
+  async execute(userDTO: any): Promise<any> {
     const requiredFields = ["fname", "lname", "email", "cpf", "password"];
 
     for (const field of requiredFields) {
-      if (!body[field]) {
+      if (!userDTO[field]) {
         throw new AppError(`Missing param: ${field}`);
       }
     }
 
-    const { cpf, email, password } = body;
+    const { cpf, email, password } = userDTO;
 
     const userAlreadyExist = await this.userRep.verifyUserAlreadyExists(
       cpf,
@@ -50,7 +34,7 @@ export class CreateUserUseCase {
     const pswdHash = await cryptPassword(password);
 
     const user = (await this.userRep.createUser({
-      ...body,
+      ...userDTO,
       password: pswdHash,
     })) as IUser;
 

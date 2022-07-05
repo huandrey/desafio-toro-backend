@@ -1,45 +1,50 @@
-import AccountNotFound from "../../../accounts/errors/AccountNotFound";
-import { AccountService } from "../../../accounts/services/AccountService";
-import {
-  badRequest,
-  sucessCreatedRequest,
-} from "../../../clients/helpers/http-helper";
+import { AccountRepository } from "modules/accounts/repositories/AccountRepository";
+import { UserRepository } from "modules/clients/repositories/UserRepository";
+import { TransferBankDTO } from "modules/transactions/DTO/TransferDTO";
+import { TransactionRepository } from "modules/transactions/repositories/TransactionRepository";
+
+import { AppError } from "../../../../shared/errors/AppError";
+import { sucessCreatedRequest } from "../../../clients/helpers/http-helper";
 import { TransactionService } from "../../services/TransactionService";
 
 export class CreateTransactionUseCase {
   constructor(
-    private transactionService: TransactionService,
-    private accountService: AccountService
+    private transationRep: TransactionRepository,
+    private userRep: UserRepository,
+    private accountRep: AccountRepository
   ) {}
 
-  async execute(transferDTO: any) {
-    try {
-      const { event, target, origin, amount } = transferDTO;
+  async execute(transferDTO: TransferBankDTO) {
+    const { event, target, origin, amount } = transferDTO;
 
-      if (event !== "TRANSFER") {
-        // exception
-      }
-
-      // verificar se todos os dados foram preenchidos
-
-      const userAccountAlreadyExists =
-        await this.accountService.verifyUserAccountAlreadyExistsByCpf(
-          origin.cpf
-        );
-
-      if (!userAccountAlreadyExists) {
-        return badRequest(new AccountNotFound().message, 400);
-      }
-
-      const account = await this.transactionService.makeTransfer(
-        userAccountAlreadyExists.id,
-        origin,
-        amount
-      );
-
-      return sucessCreatedRequest("Successful transaction.", account);
-    } catch (err) {
-      return badRequest("Some error occured while creating account", 500);
+    if (event !== "TRANSFER") {
+      throw new AppError("Invalid event passed.");
     }
+
+    // verificar se todos os dados foram preenchidos
+
+    const userExists = await this.userRep.findByCpf(origin?.cpf);
+
+    if (!userExists || !userExists.id) {
+      throw new AppError("User not exists.");
+    }
+
+    const userAccountAlreadyExists = await this.accountRep.findAccountByUserId(
+      userExists?.id
+    );
+
+    if (!userAccountAlreadyExists) {
+      throw new AppError("User account hasn't exists.");
+    }
+
+    const transaction = await this.transationRep.makeTransfer(
+      userAccountAlreadyExists.id,
+      origin,
+      amount
+    );
+
+    this.accountRep.makeDeposit(userAccountAlreadyExists.id, amount);
+
+    return sucessCreatedRequest("Successful transaction.", transaction);
   }
 }
