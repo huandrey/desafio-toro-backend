@@ -1,9 +1,11 @@
+import { Users } from "@prisma/client";
+
 import { UserDTO } from "../../DTO/UserDTO";
 import { User } from "../../entities/User";
 import { IUserRepository } from "../IUserRepository";
 
 export class UserRepositoryInMemory implements IUserRepository {
-  users: User[] = [];
+  users: Users[] = [];
 
   async createUser({
     cpf,
@@ -11,7 +13,7 @@ export class UserRepositoryInMemory implements IUserRepository {
     fname,
     lname,
     password,
-  }: UserDTO): Promise<User | undefined | null> {
+  }: UserDTO): Promise<Users> {
     const user = new User();
 
     Object.assign(user, {
@@ -27,16 +29,27 @@ export class UserRepositoryInMemory implements IUserRepository {
     return user;
   }
 
-  async findById(id: string): Promise<User | undefined | null> {
-    return this.users.find((user) => user.id === id);
+  async findById(id: string): Promise<Users | null> {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) return null;
+
+    return user;
   }
 
-  async findByCpf(cpf: string): Promise<User | undefined | null> {
-    return this.users.find((user) => user.cpf === cpf);
+  async findByCpf(cpf: string): Promise<Users | null> {
+    const user = this.users.find((user) => user.cpf === cpf);
+
+    if (!user) return null;
+
+    return user;
   }
 
-  async findByEmail(email: string): Promise<User | undefined | null> {
-    return this.users.find((user) => user.email === email);
+  async findByEmail(email: string): Promise<Users | null> {
+    const user = this.users.find((user) => user.email === email);
+
+    if (!user) return null;
+
+    return user;
   }
 
   async verifyUserAlreadyExists(

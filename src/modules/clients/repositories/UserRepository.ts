@@ -1,6 +1,7 @@
+import { Users } from "@prisma/client";
+
 import { prisma } from "../../../database";
 import { UserDTO } from "../DTO/UserDTO";
-import { User } from "../entities/User";
 import { IUserRepository } from "./IUserRepository";
 
 export class UserRepository implements IUserRepository {
@@ -10,7 +11,7 @@ export class UserRepository implements IUserRepository {
     fname,
     lname,
     password,
-  }: UserDTO): Promise<User | undefined | null> {
+  }: UserDTO): Promise<Users> {
     const user = await prisma.users.create({
       data: {
         cpf,
@@ -24,7 +25,7 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async findById(id: string): Promise<User | undefined | null> {
+  async findById(id: string): Promise<Users | null> {
     const userAlreadyExist = await prisma.users.findUnique({
       where: {
         id,
@@ -34,7 +35,7 @@ export class UserRepository implements IUserRepository {
     return userAlreadyExist;
   }
 
-  async findByCpf(cpf: string): Promise<User | undefined | null> {
+  async findByCpf(cpf: string): Promise<Users | null> {
     const userAlreadyExist = await prisma.users.findUnique({
       where: {
         cpf,
@@ -44,7 +45,7 @@ export class UserRepository implements IUserRepository {
     return userAlreadyExist;
   }
 
-  async findByEmail(email: string): Promise<User | undefined | null> {
+  async findByEmail(email: string): Promise<Users | null> {
     const userAlreadyExist = await prisma.users.findUnique({
       where: {
         email,
