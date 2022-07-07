@@ -28,7 +28,7 @@ export class CreateUserUseCase {
     );
 
     if (userAlreadyExist) {
-      throw new AppError(`User with ${userAlreadyExist} already exists.`);
+      throw new AppError(`User already exists.`);
     }
 
     const pswdHash = await cryptPassword(password);
