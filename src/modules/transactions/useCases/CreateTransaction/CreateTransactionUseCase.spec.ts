@@ -74,7 +74,7 @@ describe("Create transaction", () => {
     });
     const { data: targetAccount } = await createAccountUseCase.execute(user.id);
 
-    const { data: transaction } = await createTransactionUseCase.execute({
+    await createTransactionUseCase.execute({
       event: "TRANSFER",
       target: {
         bank: targetAccount.bank,
@@ -92,5 +92,32 @@ describe("Create transaction", () => {
     const { data: account } = await getAccountUseCase.execute(user.id);
 
     expect(account.balance).toBe(102.55);
+  });
+
+  it("should not be able make an transaction if user cpf not be equal to the account registered", async () => {
+    const { data: user } = await createUserUseCase.execute({
+      fname: "John",
+      lname: "Doe",
+      email: "any@test.com",
+      cpf: "00000000000",
+      password: "12345678",
+    });
+
+    expect(async () => {
+      await createTransactionUseCase.execute({
+        event: "TRANSFER",
+        target: {
+          bank: "352",
+          branch: "0001",
+          account: "345432",
+        },
+        origin: {
+          bank: "033",
+          branch: "03312",
+          cpf: "11111111111",
+        },
+        amount: 102.55,
+      });
+    }).rejects.toBeInstanceOf(AppError);
   });
 });
