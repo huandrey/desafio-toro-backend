@@ -37,6 +37,15 @@ export class CreateTransactionUseCase {
       throw new AppError("User account hasn't exists.");
     }
 
+    const AccountBelongsToTheUser =
+      origin.cpf === userExists.cpf &&
+      target.account === userAccountAlreadyExists.account_number &&
+      userExists.id === userAccountAlreadyExists?.fk_id_user;
+
+    if (!AccountBelongsToTheUser) {
+      throw new AppError("Account not belongs to the user");
+    }
+
     const transaction = await this.transationRep.makeTransfer(
       userAccountAlreadyExists.id,
       origin,
