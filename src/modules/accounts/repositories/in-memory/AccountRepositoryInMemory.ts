@@ -1,7 +1,6 @@
+import { Account } from "@modules/accounts/entities/Account";
+import { IAccountRepository } from "@modules/accounts/repositories/IAccountRepository";
 import { Accounts } from "@prisma/client";
-import { Account } from "modules/accounts/entities/Account";
-
-import { IAccountRepository } from "../IAccountRepository";
 
 export class AccountRepositoryInMemory implements IAccountRepository {
   accounts: Account[] = [];

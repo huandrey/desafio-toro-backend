@@ -1,7 +1,7 @@
+import { AccountRepository } from "@modules/accounts/repositories/AccountRepository";
+import { UserRepository } from "@modules/clients/repositories/UserRepository";
 import { Request, Response } from "express";
 
-import { UserRepository } from "../../../clients/repositories/UserRepository";
-import { AccountRepository } from "../../repositories/AccountRepository";
 import { CreateAccountUseCase } from "./CreateAccountUseCase";
 
 const accountRep = new AccountRepository();

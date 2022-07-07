@@ -1,8 +1,8 @@
+import { CreateTransactionController } from "@modules/transactions/useCases/CreateTransaction/CreateTransactionController";
+import { ListTransactionController } from "@modules/transactions/useCases/ListTransaction/ListTransactionController";
 import { Router } from "express";
 
-import { CreateTransactionController } from "../modules/transactions/useCases/CreateTransaction/CreateTransactionController";
-import { ListTransactionController } from "../modules/transactions/useCases/ListTransaction/ListTransactionController";
-import { ensureAuthenticated } from "../shared/http/middlewares/ensuredAutheticated";
+import { ensureAuthenticated } from "@shared/infra/http/middlewares/ensuredAutheticated";
 
 const transactionRoutes = Router();
 

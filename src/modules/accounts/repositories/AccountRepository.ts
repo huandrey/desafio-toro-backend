@@ -1,7 +1,7 @@
+import { IAccountRepository } from "@modules/accounts/repositories/IAccountRepository";
 import { Accounts } from "@prisma/client";
 
 import { prisma } from "../../../database";
-import { IAccountRepository } from "./IAccountRepository";
 
 export class AccountRepository implements IAccountRepository {
   async createAccount(userId: string): Promise<Accounts | null> {

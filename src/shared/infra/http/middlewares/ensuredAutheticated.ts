@@ -3,7 +3,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
-import { badRequest } from "../../../modules/clients/helpers/http-helper";
+import { badRequest } from "../../../../modules/clients/helpers/http-helper";
 
 // import { AppError } from "@shared/errors/AppError";
 

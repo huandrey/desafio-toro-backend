@@ -1,8 +1,8 @@
+import { CreateAccountController } from "@modules/accounts/useCases/CreateAccount/CreateAccountController";
+import { GetAccountController } from "@modules/accounts/useCases/GetAccount/GetAccountController";
 import { Router } from "express";
 
-import { CreateAccountController } from "../modules/accounts/useCases/CreateAccount/CreateAccountController";
-import { GetAccountController } from "../modules/accounts/useCases/GetAccount/GetAccountController";
-import { ensureAuthenticated } from "../shared/http/middlewares/ensuredAutheticated";
+import { ensureAuthenticated } from "@shared/infra/http/middlewares/ensuredAutheticated";
 
 const accountRoutes = Router();
 
