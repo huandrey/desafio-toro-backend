@@ -2,15 +2,19 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
-
+// import { pathsToModuleNameMapper } from "ts-jest";
 export default {
-  moduleNameMapper: {
-    // see: https://github.com/kulshekhar/ts-jest/issues/414#issuecomment-517944368
-    "^@/(.*)$": "<rootDir>/src/$1",
-  },
+  // moduleNameMapper: {
+  //   // see: https://github.com/kulshekhar/ts-jest/issues/414#issuecomment-517944368
+  //   "^@/(.*)$": "<rootDir>/src/$1",
+  // },
   // All imported modules in your tests should be mocked automatically
   // automock: false,
-
+  globals: {
+    "ts-jest": {
+      autoMapModuleNames: true,
+    },
+  },
   moduleDirectories: ["node_modules", "src"],
 
   // Stop running tests after `n` failures
@@ -24,7 +28,10 @@ export default {
 
   // Indicates whether the coverage information should be collected while executing the test
   // collectCoverage: false,
-
+  moduleNameMapper: {
+    "@modules/(.*)": "<rootDir>/src/modules/$1",
+    "@shared/(.*)": "<rootDir>/src/shared/$1",
+  },
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
 
