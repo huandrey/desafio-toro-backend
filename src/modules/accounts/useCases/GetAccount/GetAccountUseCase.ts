@@ -2,10 +2,7 @@ import { AccountRepository } from "modules/accounts/repositories/AccountReposito
 import { UserRepository } from "modules/clients/repositories/UserRepository";
 
 import { AppError } from "../../../../shared/errors/AppError";
-import {
-  badRequest,
-  sucessCreatedRequest,
-} from "../../../clients/helpers/http-helper";
+import { getSuccessRequest } from "../../../clients/helpers/http-helper";
 
 export class GetAccountUseCase {
   constructor(
@@ -23,6 +20,6 @@ export class GetAccountUseCase {
     const account = await this.accountRep.findAccountByUserId(userId);
     // ja possui uma conta?
 
-    return sucessCreatedRequest("Success account get.", account);
+    return getSuccessRequest("Success account get.", account);
   }
 }
