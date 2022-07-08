@@ -40,19 +40,25 @@ Ou, caso utilize yarn:
 ```sh
 yarn 
 ```
-Após esse comando, e necessario a criacao de um database local ou url que aponte pra um banco remoto, para isso, altere a variavel de ambiente localizada na raiz do projeto, semelhante a vista abaixo (.env)
+Após esse comando, e necessário a criação de um database local ou url que aponte pra um banco remoto, para isso, altere a variável de ambiente localizada na raiz do projeto, semelhante a vista abaixo (.env)
 ```text
 DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
 ```
 
-Para rodar a aplicacao, basta rodar o seguinte comando
+Logo após, rode esse comando para o prisma conseguir identificar as variáveis de ambiente.
+
+```sh
+yarn prisma migrate dev
+```
+
+Para rodar a aplicação, basta rodar o seguinte comando
 ```sh
 yarn dev
 ```
 
 A porta default será a 3333.
 
-Para ver as relacoes e tuplas em uma interface grafica, basta rodar
+Para ver as relações e tuplas em uma interface gráfica, basta rodar
 ```sh
 yarn prisma studio
 ```
