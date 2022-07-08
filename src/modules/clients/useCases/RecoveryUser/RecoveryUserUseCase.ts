@@ -7,7 +7,6 @@ export class RecoveryUserUseCase {
 
   async execute(id: string): Promise<any> {
     const user = await this.userRep.findById(id);
-    console.log(user);
     if (!user) {
       throw new AppError(`User not found.`);
     }
