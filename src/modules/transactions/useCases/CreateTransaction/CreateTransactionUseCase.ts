@@ -5,7 +5,6 @@ import { TransactionRepository } from "modules/transactions/repositories/Transac
 
 import { AppError } from "../../../../shared/errors/AppError";
 import { sucessCreatedRequest } from "../../../clients/helpers/http-helper";
-import { TransactionService } from "../../services/TransactionService";
 
 export class CreateTransactionUseCase {
   constructor(
