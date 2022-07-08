@@ -25,10 +25,19 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async findById(id: string): Promise<Users | null> {
+  async findById(id: string): Promise<Omit<Users, "password"> | null> {
     const userAlreadyExist = await prisma.users.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        email: true,
+        first_name: true,
+        last_name: true,
+        cpf: true,
+        created_at: true,
+        password: false,
       },
     });
 

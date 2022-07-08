@@ -4,7 +4,7 @@ import { UserDTO } from "../DTO/UserDTO";
 
 export interface IUserRepository {
   createUser(data: UserDTO): Promise<Users>;
-  findById(id: string): Promise<Users | null>;
+  findById(id: string): Promise<Omit<Users, "password"> | null>;
   findByCpf(cpf: string): Promise<Users | null>;
   findByEmail(email: string): Promise<Users | null>;
   verifyUserAlreadyExists(
